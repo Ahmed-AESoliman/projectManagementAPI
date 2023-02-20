@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\UsersController;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\DB;
@@ -63,4 +64,8 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
         return new  AuthenticatedUserResource($request->user());
     });
     route::post('/logout', [AuthController::class, 'loggout']);
+
+    //users companys
+    route::post('/create-user', [UsersController::class, 'store']);
+    route::put('/{id}/edit-user', [UsersController::class, 'update']);
 });

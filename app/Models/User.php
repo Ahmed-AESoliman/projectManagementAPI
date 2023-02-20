@@ -25,24 +25,45 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'full_name',
+        'user_mobile',
+        'role',
+        'avatar',
+        'company_mobile',
+        'company_name',
+        'company_address',
+        'company_description',
+        'parent_id',
+        'creator_id',
+        'active',
+        'company_logo',
+        'is_mangement_team'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function parent()
+    {
+        return $this->belongsTo(User::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(User::class, 'parent_id');
+    }
+    public function creator()
+    {
+        return $this->hasMany(User::class, 'creator_id');
+    }
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
 }
