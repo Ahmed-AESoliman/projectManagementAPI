@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -22,7 +23,6 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
         'full_name',
@@ -65,5 +65,24 @@ class User extends Authenticatable implements MustVerifyEmail
     public function attachments()
     {
         return $this->morphMany(Attachment::class, 'attachable');
+    }
+
+    /**
+     * Get all of the projects owner for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projectsOwner(): HasMany
+    {
+        return $this->hasMany(Project::class, 'project_owner', 'id');
+    }
+    /**
+     * Get all of the projectCreator for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projectCreator(): HasMany
+    {
+        return $this->hasMany(Project::class, 'creator_id', 'id');
     }
 }

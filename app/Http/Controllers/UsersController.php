@@ -75,8 +75,9 @@ class UsersController extends Controller
             $attachment = $user->attachments()->where('file_name', 'user avatar')->first();
             if ($attachment !== null && $user) {
                 Storage::disk()->delete($attachment->file_path);
+                $attachment->delete();
             }
-            $path = $request->file('user_avatar')->storeAs('uploads/users/profiles/' . $user->full_name . '-' . $user->id, $request->user_avatar->hashName());
+            $path = $request->file('user_avatar')->storeAs('uploads/profiles/' . $user->full_name . '-' . $user->id, $request->user_avatar->hashName());
             $user->attachments()->updateOrCreate([
                 'file_path' => $path,
                 'file_name' => 'user avatar'
@@ -86,8 +87,9 @@ class UsersController extends Controller
             $attachment = $user->attachments()->where('file_name', 'company logo')->first();
             if ($attachment !== null && $user) {
                 Storage::disk()->delete($attachment->file_path);
+                $attachment->delete();
             }
-            $path = $request->file('company_logo')->storeAs('uploads/users/profiles/' . $user->full_name . '-' . $user->id, $request->company_logo->hashName());
+            $path = $request->file('company_logo')->storeAs('uploads/profiles/' . $user->full_name . '-' . $user->id, $request->company_logo->hashName());
             $user->attachments()->updateOrCreate([
                 'file_path' => $path,
                 'file_name' => 'company logo'

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('company_mobile')->nullable();
             $table->string('company_name')->nullable();
             $table->string('company_address')->nullable();
-            $table->string('company_description')->nullable();
+            $table->longText('company_description')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->boolean('active')->default(0);
             $table->foreign('parent_id')->references('id')->on('users')->onDelete('cascade');
