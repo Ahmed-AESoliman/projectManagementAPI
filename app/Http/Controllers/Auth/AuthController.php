@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AuthenticatedUserResource;
+use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -18,17 +19,24 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $request->validate([
+        $companyData = $request->validate([
+            'company_mobile' => 'required',
+            'company_name' => 'required',
+            'company_address' => 'required',
+            'company_description' => 'required|min:100',
+        ]);
+        $company = Company::create($companyData);
+        $userData = $request->validate([
             'full_name' => 'required|max:225',
             'email' => 'required|unique:users|email',
             'password' => 'required|min:6'
         ]);
+        $userData['company_owner'] = true;
+        $userData['company_id'] = $company->id;
+        $userData['password'] = Hash::make($userData['password']);
+        $userData['role'] = 'company owner';
 
-        $user = User::create([
-            'full_name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $user = User::create($userData);
         $user->notify(new VerifyEmailNotification());
         return new AuthenticatedUserResource($user);
     }

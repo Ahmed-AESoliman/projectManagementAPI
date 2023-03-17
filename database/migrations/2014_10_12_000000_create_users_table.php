@@ -19,17 +19,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('user_mobile')->nullable();
             $table->string('role');
-            $table->string('company_mobile')->nullable();
-            $table->string('company_name')->nullable();
-            $table->string('company_address')->nullable();
-            $table->longText('company_description')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->boolean('active')->default(0);
+            $table->boolean('company_owner')->default(0);
+            $table->foreignId('company_id')->nullable()->constrained();
             $table->foreign('parent_id')->references('id')->on('users')->onDelete('cascade');
             // for creator users is admin
             $table->boolean('is_mangement_team')->default(0);
-            $table->unsignedBigInteger('creator_id')->nullable();
-            $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

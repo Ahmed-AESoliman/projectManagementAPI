@@ -12,7 +12,7 @@ class Project extends Model
     protected $fillable = [
         'name',
         'description',
-        'project_owner',
+        'company_id',
         'creator_id',
     ];
 
@@ -21,9 +21,9 @@ class Project extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function owner(): BelongsTo
+    public function company(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'project_owner');
+        return $this->belongsTo(Company::class, 'company_id');
     }
     /**
      * Get the creator that owns the Project

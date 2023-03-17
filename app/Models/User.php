@@ -29,15 +29,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'user_mobile',
         'role',
         'avatar',
-        'company_mobile',
-        'company_name',
-        'company_address',
-        'company_description',
         'parent_id',
-        'creator_id',
-        'active',
-        'company_logo',
-        'is_mangement_team'
+        'is_mangement_team',
+        'company_owner',
+        'company_id'
     ];
 
     protected $hidden = [
@@ -58,31 +53,33 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(User::class, 'parent_id');
     }
-    public function creator()
+    public function company()
     {
-        return $this->hasMany(User::class, 'creator_id');
+        return $this->belongsTo(User::class, 'company_id');
     }
     public function attachments()
     {
         return $this->morphMany(Attachment::class, 'attachable');
     }
 
-    /**
-     * Get all of the projects owner for the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+
     public function projectsOwner(): HasMany
     {
         return $this->hasMany(Project::class, 'project_owner', 'id');
     }
-    /**
-     * Get all of the projectCreator for the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+
     public function projectCreator(): HasMany
     {
         return $this->hasMany(Project::class, 'creator_id', 'id');
+    }
+
+    public function companyOwner(): HasMany
+    {
+        return $this->hasMany(Employee::class, 'company', 'id');
+    }
+
+    public function employeeCreator(): HasMany
+    {
+        return $this->hasMany(Employee::class, 'creator_id', 'id');
     }
 }

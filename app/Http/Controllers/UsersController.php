@@ -14,11 +14,39 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $authUser = auth()->user();
+
+        // $companyData=$request->validate([
+        //     'company_mobile' => 'required',
+        //     'company_name' => 'required',
+        //     'company_address' => 'required',
+        //     'company_description' => 'required|min:100',
+        // ])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         $data = $this->formValidate($request);
         //  Note: must check if creator is admin or not
         if ($authUser->is_mangement_team) {
             $data['role'] = 'manger';
-            $data['creator_id'] = $authUser->id;
+            $data['parent_id'] = $authUser->parent_id ?? $authUser->id;
             if ($request->is_mangement) {
                 $data['is_mangement_team'] = true;
             }
@@ -61,10 +89,7 @@ class UsersController extends Controller
                 'full_name' => 'required|max:225',
                 'email' => 'required|email|unique:users,email,' . $userId,
                 'user_mobile' => 'required',
-                'company_mobile' => 'required',
-                'company_name' => 'required',
-                'company_address' => 'required',
-                'company_description' => 'required|min:100',
+
             ]);
         }
         return $data;
